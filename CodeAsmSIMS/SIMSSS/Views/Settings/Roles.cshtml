@@ -1,0 +1,120 @@
+@model IEnumerable<SIMSS.SimsDbContext.Entities.Users>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewData["Title"] = "Roles Management";
+    ViewData["breadcrumb"] = "Settings";
+    ViewData["breadcrumb-item"] = "Roles";
+}
+
+<div class="row mb-4">
+    <div class="col-lg-12">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="row mb-4">
+    @if (ViewBag.RoleStats != null)
+    {
+        foreach (var stat in ViewBag.RoleStats)
+        {
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="small">@stat.Role</div>
+                                <div class="h4 mb-0">@stat.Count</div>
+                            </div>
+                            <div><i class="fas fa-users fa-2x"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        User Roles Management
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>UserID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@user.UserID</td>
+                                <td>@user.Username</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    <span class="badge bg-@(user.Role == "Admin" ? "danger" : user.Role == "Faculty" ? "warning" : "info")">
+                                        @user.Role
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-@(user.Status == "Active" ? "success" : "secondary")">
+                                        @user.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    <form asp-action="UpdateRole" method="post" style="display:inline-block" class="me-2">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="userId" value="@user.UserID" />
+                                        <select name="role" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                            <option value="Admin" selected="@(user.Role == "Admin")">Admin</option>
+                                            <option value="Faculty" selected="@(user.Role == "Faculty")">Faculty</option>
+                                            <option value="Student" selected="@(user.Role == "Student")">Student</option>
+                                        </select>
+                                    </form>
+                                    <form asp-action="UpdateStatus" method="post" style="display:inline-block">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="userId" value="@user.UserID" />
+                                        <select name="status" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                            <option value="Active" selected="@(user.Status == "Active")">Active</option>
+                                            <option value="Inactive" selected="@(user.Status == "Inactive")">Inactive</option>
+                                            <option value="Suspended" selected="@(user.Status == "Suspended")">Suspended</option>
+                                        </select>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">No users found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

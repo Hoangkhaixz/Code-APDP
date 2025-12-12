@@ -1,0 +1,80 @@
+@model SIMSS.SimsDbContext.Entities.Users
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewData["Title"] = "Account Settings";
+    ViewData["breadcrumb"] = "Settings";
+    ViewData["breadcrumb-item"] = "Account";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-user me-1"></i>
+                Account Information
+            </div>
+            <div class="card-body">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                <form asp-action="Account" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="UserID" />
+                    
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label">Username</label>
+                        <input asp-for="Username" class="form-control" readonly />
+                        <small class="form-text text-muted">Username cannot be changed</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" class="form-control" type="email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Phone" class="form-label">Phone</label>
+                        <input asp-for="Phone" class="form-control" type="tel" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <input type="text" class="form-control" value="@Model.Role" readonly />
+                        <small class="form-text text-muted">Role cannot be changed from here. Contact Admin for role changes.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <input type="text" class="form-control" value="@Model.Status" readonly />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Account Created</label>
+                        <input type="text" class="form-control" value="@Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Last Updated</label>
+                        <input type="text" class="form-control" value="@Model.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>
+                        Save Changes
+                    </button>
+                    <a asp-action="Index" asp-controller="Dashboard" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml");}
+}

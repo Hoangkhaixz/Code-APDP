@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\assets",
+    "\\Controllers",
+    "\\Interfaces",
+    "\\Models",
+    "\\Repository",
+    "\\Services",
+    "\\SimsDbContext",
+    "\\SimsDbContext\\Entities",
+    "\\Views"
+  ],
+  "SelectedNode": "\\SimsDbContext\\Entities\\Enrollment.cs",
+  "PreviewInSolutionExplorer": false
+}

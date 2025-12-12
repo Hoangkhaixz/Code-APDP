@@ -1,0 +1,117 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var username = HttpContextAccessor.HttpContext?.User.Identity?.Name;
+    var role = HttpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Role)?.Value;
+}
+<div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+                <div class="sb-sidenav-menu-heading">Overview</div>
+                <a class="nav-link" href="@Url.Action("Index", "Dashboard")">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Dashboard
+                </a>
+                @if (role == "Admin")
+                {
+                    <div class="sb-sidenav-menu-heading">Managements</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Courses
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="@Url.Action("Add","Course")">Add new Courses</a>
+                            <a class="nav-link" href="@Url.Action("Index","Course")">List of Courses</a>
+                        </nav>
+                    </div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Students
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link " href="@Url.Action("Add", "Student")">
+                                Add new Students
+                            </a>
+                            <a class="nav-link" href="@Url.Action("Index", "Student")"> 
+                                List of Students                 
+                            </a>                     
+                        </nav>
+                    </div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFaculty" aria-expanded="false" aria-controls="collapseFaculty">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Faculty
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseFaculty" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="@Url.Action("Add","Faculty")">Add new Faculty</a>
+                            <a class="nav-link" href="@Url.Action("Index","Faculty")">List of Faculty</a>
+                        </nav>
+                    </div>
+                }
+                else if (role == "Student" || role == "Faculty")
+                {
+                    <div class="sb-sidenav-menu-heading">View</div>
+                    @if (role == "Student")
+                    {
+                        <a class="nav-link" href="@Url.Action("MyGrades", "Dashboard")">
+                            <div class="sb-nav-link-icon"><i class="fas fa-poll"></i></div>
+                            View My Grades
+                        </a>
+                        <a class="nav-link" href="@Url.Action("EditProfile", "Dashboard")">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-edit"></i></div>
+                            Edit Profile
+                        </a>
+                    }
+                    <a class="nav-link" href="@Url.Action("Index", "Student")">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Students
+                    </a>
+                    <a class="nav-link" href="@Url.Action("Index", "Course")">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Courses
+                    </a>
+                    @if (role == "Faculty")
+                    {
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseEnrollment" aria-expanded="false" aria-controls="collapseEnrollment">
+                            <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                            Enrollments
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseEnrollment" aria-labelledby="headingFour" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="@Url.Action("Add","Enrollment")">Add new Enrollment</a>
+                                <a class="nav-link" href="@Url.Action("Index","Enrollment")">List of Enrollments</a>
+                            </nav>
+                        </div>
+                    }
+                }
+                <div class="sb-sidenav-menu-heading">Settings</div>
+                <a class="nav-link" href="@Url.Action("Account", "Settings")">
+                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                    Account
+                </a>
+                @if (role == "Admin")
+                {
+                    <a class="nav-link" href="@Url.Action("Roles", "Settings")">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users-cog"></i></div>
+                        Roles
+                    </a>
+                }
+            </div>
+        </div>
+        <div class="sb-sidenav-footer">
+            <div class="small">Logged in as:</div>
+            @username - @role
+        </div>
+    </nav>
+</div>

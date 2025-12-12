@@ -1,0 +1,94 @@
+@model SIMSS.Models.AddEditStudentViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewData["Title"] = "Edit Student";
+    ViewData["breadcrumb"] = "Edit Student";
+    ViewData["breadcrumb-item"] = "Edit existing Student";
+}
+
+<h2>Edit Student</h2>
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="StudentID" />
+    <input type="hidden" asp-for="UserID" />
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DateOfBirth" class="form-label"></label>
+        <input asp-for="DateOfBirth" class="form-control" type="date" />
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Gender" class="form-label"></label>
+        <select asp-for="Gender" class="form-select">
+            <option value="">-- Select Gender --</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Program" class="form-label"></label>
+        <input asp-for="Program" class="form-control" placeholder="e.g., Computer Science, Business Administration" />
+        <span asp-validation-for="Program" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="EnrollmentDate" class="form-label"></label>
+        <input asp-for="EnrollmentDate" class="form-control" type="date" />
+        <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FacultyID" class="form-label"></label>
+        <select asp-for="FacultyID" class="form-select" asp-items="@(new SelectList(ViewBag.Faculties as System.Collections.IEnumerable, "FacultyID", "Name"))">
+            <option value="">-- Select Faculty --</option>
+        </select>
+        <span asp-validation-for="FacultyID" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Username" class="form-label"></label>
+        <input asp-for="Username" class="form-control" readonly />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" placeholder="Email (Optional)" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" placeholder="Phone (Optional)" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <div class="input-group">
+            <input asp-for="Password" class="form-control" type="password" id="Password" placeholder="Leave blank to keep current password" />
+            <button type="button" class="btn btn-outline-secondary" tabindex="-1" onclick="togglePass('Password', this)"><i class="fa fa-eye"></i></button>
+        </div>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ConfirmPassword" class="form-label"></label>
+        <div class="input-group">
+            <input asp-for="ConfirmPassword" class="form-control" type="password" id="ConfirmPassword" placeholder="Leave blank to keep current password" />
+            <button type="button" class="btn btn-outline-secondary" tabindex="-1" onclick="togglePass('ConfirmPassword', this)"><i class="fa fa-eye"></i></button>
+        </div>
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml");}
+}

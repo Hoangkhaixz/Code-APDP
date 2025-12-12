@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SIMSS.SimsDbContext.Entities.Course>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewData["Title"] = "Course page";
+    ViewData["breadcrumb"] = "Courses";
+    ViewData["breadcrumb-item"] = "List of Courses";
+}
+<h2>List of Courses</h2>
+@if (User.IsInRole("Admin"))
+{
+    <a asp-action="Add" class="btn btn-success mb-3">Add New Course</a>
+}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>CourseCode</th>
+            <th>CourseName</th>
+            <th>Credits</th>
+            <th>Department</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th>Actions</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CourseCode</td>
+                <td>@item.CourseName</td>
+                <td>@item.Credits</td>
+                <td>@item.Department</td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.CourseID" class="btn btn-primary btn-sm">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@item.CourseID" method="post" style="display:inline-block" onsubmit="return confirm('Do you really want to delete this course?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                }
+            </tr>
+        }
+    } else {
+        <tr><td colspan="5" class="text-center">No courses found.</td></tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,56 @@
+@using SIMSS.Models
+@model List<StudentGradesViewModel>
+
+@{
+    ViewData["Title"] = "My Grades";
+    ViewData["breadcrumb"] = "Dashboard";
+    ViewData["breadcrumb-item"] = "My Grades";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<h1 class="mt-4">My Grades</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
+    <li class="breadcrumb-item active">My Grades</li>
+</ol>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-graduation-cap me-1"></i>
+        Your Grade Report
+    </div>
+    <div class="card-body">
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Enrollment Date</th>
+                            <th>Class</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.CourseCode</td>
+                                <td>@item.CourseName</td>
+                                <td>@item.EnrollmentDate.ToString("dd/MM/yyyy")</td>
+                                <td>@(item.Class ?? "N/A")</td>
+                                <td>@(item.Grade ?? "N/A")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>You do not have any grades yet.</p>
+        }
+    </div>
+</div>

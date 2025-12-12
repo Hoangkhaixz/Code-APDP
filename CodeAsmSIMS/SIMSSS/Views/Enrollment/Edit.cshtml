@@ -1,0 +1,95 @@
+@model SIMSS.SimsDbContext.Entities.Enrollment
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewData["Title"] = "Edit Enrollment";
+    ViewData["breadcrumb"] = "Edit Enrollment";
+    ViewData["breadcrumb-item"] = "Edit Enrollment Info";
+}
+<h2>Edit Enrollment</h2>
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="EnrollmentID" />
+    <div class="mb-3">
+        <label class="form-label">Student</label>
+        <input type="hidden" asp-for="StudentID" />
+        <input class="form-control" value="@(ViewBag.Students != null ? ((System.Collections.IEnumerable)ViewBag.Students).Cast<dynamic>().FirstOrDefault(x => x.StudentID == Model.StudentID)?.Name : Model.StudentID.ToString())" readonly />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CourseID" class="form-label">Course</label>
+        <select asp-for="CourseID" class="form-select" asp-items="@(new SelectList(ViewBag.Courses as System.Collections.IEnumerable, "CourseID", "Name"))">
+            <option value="">-- Select Course --</option>
+        </select>
+        <span asp-validation-for="CourseID" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="EnrollmentDate" class="form-label">Enrollment Date</label>
+        <input asp-for="EnrollmentDate" class="form-control" type="date" />
+        <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+    </div>
+    @* Tạm thời ẩn Class field vì database chưa có column này
+    <div class="mb-3">
+        <label asp-for="Class" class="form-label">Class</label>
+        <input asp-for="Class" class="form-control" list="classSuggestions" placeholder="e.g., DH22IT1, DH23CS2, Lớp 1A" maxlength="50" />
+        <datalist id="classSuggestions">
+            @if (ViewBag.ExistingClasses != null)
+            {
+                foreach (var className in ViewBag.ExistingClasses)
+                {
+                    <option value="@className">@className</option>
+                }
+            }
+            <option value="DH22IT1">DH22IT1 - Đại học CNTT K22 Lớp 1</option>
+            <option value="DH22IT2">DH22IT2 - Đại học CNTT K22 Lớp 2</option>
+            <option value="DH23CS1">DH23CS1 - Đại học KHMT K23 Lớp 1</option>
+            <option value="DH23CS2">DH23CS2 - Đại học KHMT K23 Lớp 2</option>
+            <option value="DH24IS1">DH24IS1 - Đại học Hệ thống thông tin K24</option>
+            <option value="Lớp 1A">Lớp 1A</option>
+            <option value="Lớp 2A">Lớp 2A</option>
+            <option value="Lớp 3A">Lớp 3A</option>
+            <option value="Lớp 1B">Lớp 1B</option>
+            <option value="Lớp 2B">Lớp 2B</option>
+            <option value="CĐ21IT1">CĐ21IT1 - Cao đẳng CNTT K21</option>
+            <option value="CĐ22IT1">CĐ22IT1 - Cao đẳng CNTT K22</option>
+        </datalist>
+        <span asp-validation-for="Class" class="text-danger"></span>
+        <small class="form-text text-muted">Enter class name (e.g., DH22IT1, Lớp 1A)</small>
+    </div>
+    *@
+    <div class="mb-3">
+        <label asp-for="Grade" class="form-label">Grade</label>
+        <input asp-for="Grade" class="form-control" list="gradeSuggestions" placeholder="e.g., A, B+, C" maxlength="10" />
+        <datalist id="gradeSuggestions">
+            @if (ViewBag.ExistingGrades != null)
+            {
+                foreach (var grade in ViewBag.ExistingGrades)
+                {
+                    <option value="@grade">@grade</option>
+                }
+            }
+            <option value="A+">A+ (Excellent)</option>
+            <option value="A">A (Very Good)</option>
+            <option value="A-">A- (Very Good)</option>
+            <option value="B+">B+ (Good)</option>
+            <option value="B">B (Good)</option>
+            <option value="B-">B- (Good)</option>
+            <option value="C+">C+ (Satisfactory)</option>
+            <option value="C">C (Satisfactory)</option>
+            <option value="C-">C- (Satisfactory)</option>
+            <option value="D+">D+ (Pass)</option>
+            <option value="D">D (Pass)</option>
+            <option value="D-">D- (Pass)</option>
+            <option value="F">F (Fail)</option>
+            <option value="P">P (Pass)</option>
+            <option value="I">I (Incomplete)</option>
+            <option value="W">W (Withdrawn)</option>
+        </datalist>
+        <span asp-validation-for="Grade" class="text-danger"></span>
+        <small class="form-text text-muted">Enter grade (A+, A, B+, B, C, D, F, etc.)</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml");}
+}

@@ -1,0 +1,115 @@
+﻿@model SIMSS.SimsDbContext.Entities.Course
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewData["Title"] = "Add Course page";
+    ViewData["breadcrumb"] = "Add Courses";
+    ViewData["breadcrumb-item"] = "Add a new courses";
+}
+<h2>Add New Course</h2>
+<!-- Hiển thị lỗi chung (ví dụ lỗi trùng lặp) -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+<form asp-action="Add" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="CourseCode" class="form-label">Course Code</label>
+        <input asp-for="CourseCode" class="form-control" list="courseCodeSuggestions" placeholder="e.g., CS101, MATH201, ENG301" />
+        <datalist id="courseCodeSuggestions">
+            @if (ViewBag.ExistingCourseCodes != null)
+            {
+                foreach (var code in ViewBag.ExistingCourseCodes)
+                {
+                    <option value="@code">@code</option>
+                }
+            }
+            <option value="CS101">CS101 - Computer Science</option>
+            <option value="MATH201">MATH201 - Mathematics</option>
+            <option value="ENG301">ENG301 - Engineering</option>
+            <option value="BUS401">BUS401 - Business</option>
+            <option value="PHY201">PHY201 - Physics</option>
+        </datalist>
+        <span asp-validation-for="CourseCode" class="text-danger"></span>
+        <small class="form-text text-muted">Format: Department abbreviation + number (e.g., CS101, MATH201)</small>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CourseName" class="form-label">Course Name</label>
+        <input asp-for="CourseName" class="form-control" list="courseNameSuggestions" placeholder="e.g., Introduction to Programming" />
+        <datalist id="courseNameSuggestions">
+            @if (ViewBag.ExistingCourseNames != null)
+            {
+                foreach (var name in ViewBag.ExistingCourseNames)
+                {
+                    <option value="@name">@name</option>
+                }
+            }
+            <option value="Introduction to Programming">Introduction to Programming</option>
+            <option value="Object-Oriented Programming">Object-Oriented Programming</option>
+            <option value="Database Systems">Database Systems</option>
+            <option value="Data Structures and Algorithms">Data Structures and Algorithms</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Software Engineering">Software Engineering</option>
+            <option value="Operating Systems">Operating Systems</option>
+            <option value="Computer Networks">Computer Networks</option>
+            <option value="Machine Learning">Machine Learning</option>
+            <option value="Cybersecurity">Cybersecurity</option>
+            <option value="Mobile Application Development">Mobile Application Development</option>
+            <option value="Database Design">Database Design</option>
+            <option value="System Analysis and Design">System Analysis and Design</option>
+        </datalist>
+        <span asp-validation-for="CourseName" class="text-danger"></span>
+        <small class="form-text text-muted">Type to see suggestions from existing courses</small>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Credits" class="form-label">Credits</label>
+        <input asp-for="Credits" class="form-control" type="number" min="1" max="10" list="creditsSuggestions" />
+        <datalist id="creditsSuggestions">
+            <option value="1">1 Credit</option>
+            <option value="2">2 Credits</option>
+            <option value="3">3 Credits (Most Common)</option>
+            <option value="4">4 Credits</option>
+            <option value="5">5 Credits</option>
+        </datalist>
+        <span asp-validation-for="Credits" class="text-danger"></span>
+        <small class="form-text text-muted">Typically 1-4 credits, maximum 10</small>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Department" class="form-label">Department</label>
+        <input asp-for="Department" class="form-control" list="departmentSuggestions" placeholder="e.g., Computer Science" />
+        <datalist id="departmentSuggestions">
+            @if (ViewBag.ExistingDepartments != null)
+            {
+                foreach (var dept in ViewBag.ExistingDepartments)
+                {
+                    <option value="@dept">@dept</option>
+                }
+            }
+            <option value="Computer Science">Computer Science</option>
+            <option value="Information Systems">Information Systems</option>
+            <option value="Information Technology">Information Technology</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Business Administration">Business Administration</option>
+            <option value="Electrical Engineering">Electrical Engineering</option>
+            <option value="Mechanical Engineering">Mechanical Engineering</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+        </datalist>
+        <span asp-validation-for="Department" class="text-danger"></span>
+        <small class="form-text text-muted">Type to see suggestions from existing departments</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Course</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml");}
+}

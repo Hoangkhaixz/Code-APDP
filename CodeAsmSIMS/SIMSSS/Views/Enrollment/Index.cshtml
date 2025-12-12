@@ -1,0 +1,66 @@
+@using SIMSS.Models
+@model List<EnrollmentDetailViewModel>
+
+@{
+    ViewData["Title"] = "Enrollments";
+    ViewData["breadcrumb"] = "Enrollments";
+    ViewData["breadcrumb-item"] = "List of Enrollments";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<h1 class="mt-4">List of Enrollments</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
+    <li class="breadcrumb-item active">Enrollments</li>
+</ol>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Enrollment Details
+    </div>
+    <div class="card-body">
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Enrollment Date</th>
+                            <th>Grade</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var enrollment in Model)
+                        {
+                            <tr>
+                                <td>@enrollment.StudentID</td>
+                                <td>@enrollment.StudentName</td>
+                                <td>@enrollment.CourseCode</td>
+                                <td>@enrollment.CourseName</td>
+                                <td>@enrollment.EnrollmentDate.ToString("dd/MM/yyyy")</td>
+                                <td>@(enrollment.Grade ?? "N/A")</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "Enrollment", new { id = enrollment.EnrollmentID })" class="btn btn-warning btn-sm">Edit</a>
+                                    <form asp-action="Delete" asp-controller="Enrollment" method="post" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this enrollment?');">
+                                        <input type="hidden" name="id" value="@enrollment.EnrollmentID" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>No enrollment records found.</p>
+        }
+    </div>
+</div>
